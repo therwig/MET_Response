@@ -212,41 +212,4 @@ f_in.Close()
 f_fits.Close()
 f_out.Close()
 
-exit(0)
-#read histograms
-f_in = TFile("histograms.root","read")
-hists=OrderedDict()
-GetHist(f_in,hists,"pf_abs"          )
-GetHist(f_in,hists,"pf_ratio"        )
-GetHist(f_in,hists,"puppi_abs"       )
-GetHist(f_in,hists,"puppi_ratio"     )
-GetHist(f_in,hists,"pf_para_abs"     ) #components
-GetHist(f_in,hists,"pf_perp_abs"     )
-GetHist(f_in,hists,"pf_para_ratio"   )
-GetHist(f_in,hists,"pf_perp_ratio"   )
-GetHist(f_in,hists,"puppi_para_abs"  )
-GetHist(f_in,hists,"puppi_perp_abs"  )
-GetHist(f_in,hists,"puppi_para_ratio")
-GetHist(f_in,hists,"puppi_perp_ratio")
-
-# figure out sensible histogram ranges
-abs_range = (hists["pf_abs"].GetYaxis().GetBinLowEdge(1),hists["pf_abs"].GetYaxis().GetBinLowEdge(1+hists["pf_abs"].GetNbinsY()))
-ratio_range = (hists["pf_ratio"].GetYaxis().GetBinLowEdge(1),hists["pf_ratio"].GetYaxis().GetBinLowEdge(1+hists["pf_ratio"].GetNbinsY()))
-f_fits = TFile("fits.root","recreate")
-
-gpairs=OrderedDict()
-gpairs["puppi_ratio"] = FitSlices(hists["puppi_ratio"],f_fits)
-gpairs["puppi_abs"] = FitSlices(hists["puppi_abs"],f_fits)
-
-f_out = TFile("results.root","recreate")
-for p in gpairs:
-    gpairs[p][0].Write()
-    gpairs[p][1].Write()
-    plot(gpairs[p][0],"response",ratio_range)
-    plot(gpairs[p][1],"resolution",abs_range)
-
-f_in.Close()
-f_fits.Close()
-f_out.Close()
-
 
