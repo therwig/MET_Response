@@ -74,7 +74,7 @@ def RunFits(hz,hpara,hperp,name,fout=None,simple=True):
         # fit
         if simple:
             z.append(z_slice.GetMean())
-            ze.append(z_slice.GetRMS())
+            ze.append(z_slice.GetRMS()/sqrt(z_slice.GetEntries()) if z_slice.GetEntries() else 0.)
             zeup.append(hi-z_slice.GetMean()) # asym errors
             zedn.append(z_slice.GetMean()-lo) # asym errors
             para.append(para_slice.GetMean())
