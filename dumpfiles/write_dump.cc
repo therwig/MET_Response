@@ -4,7 +4,7 @@
 void write_dump(){
 
     // read inputs from the ttree
-    TFile* fin = new TFile("samples/perfNano_DY.root","read");
+    TFile* fin = new TFile("../samples/perfNano_DY.root","read");
     TTree* t = (TTree*) fin->Get("Events");
     TTreeReader reader(t);
     // read pf objects
