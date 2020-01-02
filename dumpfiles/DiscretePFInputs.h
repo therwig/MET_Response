@@ -272,6 +272,24 @@ namespace l1tpf_int {
       }
       void  setFloatPt(float pt) { hwPt  = round(pt  * CaloCluster::PT_SCALE); }
 #endif
+
+#ifdef FASTPUPPI_NTUPLERPRODUCER_DISCRETEPFINPUTS_IO
+      void writeToFile(FILE *file) const {
+        fwrite(&hwPt, 2, 1, file);
+        fwrite(&hwEta, 2, 1, file);
+        fwrite(&hwPhi, 2, 1, file);
+        fwrite(&hwPuppiWeight, 2, 1, file);
+        fwrite(&hwId, 1, 1, file);
+      }
+      void readFromFile(FILE *file) {
+        fread(&hwPt, 2, 1, file);
+        fread(&hwEta, 2, 1, file);
+        fread(&hwPhi, 2, 1, file);
+        fread(&hwPuppiWeight, 2, 1, file);
+        fread(&hwId, 1, 1, file);
+      }
+#endif
+
   };
 
 
@@ -332,6 +350,29 @@ namespace l1tpf_int {
         readManyFromFile(emcalo, file);
         readManyFromFile(track, file);
         readManyFromFile(muon, file);
+    }
+#endif
+    
+  };
+
+
+  struct OutputRegion {
+    /* float etaCenter, etaMin, etaMax, phiCenter, phiHalfWidth; */
+    /* float etaExtra, phiExtra; */
+    std::vector<PFParticle>      pf;
+
+    /* OutputRegion() : etaCenter(), etaMin(), etaMax(), phiCenter(), phiHalfWidth(), etaExtra(), phiExtra() {} */
+    /* OutputRegion(float etacenter, float etamin, float etamax, float phicenter, float phihalfwidth, float etaextra, float phiextra) : */
+    /*     etaCenter(etacenter), etaMin(etamin), etaMax(etamax), phiCenter(phicenter), phiHalfWidth(phihalfwidth), etaExtra(etaextra), phiExtra(phiextra) {} */
+
+#ifdef FASTPUPPI_NTUPLERPRODUCER_DISCRETEPFINPUTS_IO
+    void writeToFile(FILE *file) const {
+        assert(4 == sizeof(float));
+        writeManyToFile(pf, file);
+    }
+    void readFromFile(FILE *file) {
+        assert(4 == sizeof(float));
+        readManyFromFile(pf, file);
     }
 #endif
     
